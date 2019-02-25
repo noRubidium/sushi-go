@@ -104,8 +104,9 @@ module Make = (Deck: Deck.S) => {
         "), Table(" ++ Utils.string_of_list(t.table, ~f=Deck.toString)++ ")))";
 
     module Scoring = {
-        let updateGameCtx = (t, ctx) => Deck.updateGameContext(List.hd(t.table), ctx);
-        let updatePlayerCtx = (t) => Deck.updatePlayerContext(List.hd(t.table), t.ctx);
-        let scoreThisTurn = (t: t, gCtx) => Deck.score(List.hd(t.table), t.ctx, gCtx);
+        let lastPlayed = t => List.hd(t.table);
+        let updateGameCtx = (t, ctx) => t |> lastPlayed |> Deck.updateGameContext(ctx);
+        let updatePlayerCtx = (t) => t |> lastPlayed |> Deck.updatePlayerContext(t.ctx);
+        let scoreThisTurn = (t: t, gCtx) => t |> lastPlayed |> Deck.score(t.ctx, gCtx);
     }
 }

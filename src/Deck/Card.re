@@ -3,11 +3,11 @@ module type S = {
 
     let getNewSortedDeck: unit => list(t);
 
-    let score: (t, PlayerScoringCtx.t, GameScoringCtx.t) => int;
+    let score: (PlayerScoringCtx.t, GameScoringCtx.t, t) => int;
 
-    let updateGameContext: (t, GameScoringCtx.t) => GameScoringCtx.t;
+    let updateGameContext: (GameScoringCtx.t, t) => GameScoringCtx.t;
 
-    let updatePlayerContext: (t, PlayerScoringCtx.t) => PlayerScoringCtx.t;
+    let updatePlayerContext: (PlayerScoringCtx.t, t) => PlayerScoringCtx.t;
 
     let getImage: t => string;
 

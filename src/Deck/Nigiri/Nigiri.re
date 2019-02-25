@@ -17,11 +17,11 @@ module Make = (N: N) => {
 
     let getNewSortedDeck = () => Utils.repeat(N.num_cards, ~f=(_i) => ());
 
-    let score = (_t, ctx, _ctx) => N.num_points * (PlayerScoringCtx.getTripleScoringNigiri(ctx) ? 3 : 1);
+    let score = (ctx, _ctx, _t) => N.num_points * (PlayerScoringCtx.getTripleScoringNigiri(ctx) ? 3 : 1);
 
-    let updateGameContext = (_t, ctx) => ctx;
+    let updateGameContext = (ctx, _t) => ctx;
 
-    let updatePlayerContext = (_t, ctx) => PlayerScoringCtx.setTripleScoringNigiri(ctx, false);
+    let updatePlayerContext = (ctx, _t) => PlayerScoringCtx.setTripleScoringNigiri(ctx, false);
 
     let getImage = (_t) => Constants.imgBase ++ N.image ++ ".png";
 
