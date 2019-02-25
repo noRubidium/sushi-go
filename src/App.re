@@ -2,6 +2,7 @@ module D = Deck.Make(TamagoNigiri, SalmonNigiri, SquidNigiri);
 module Game = Game.Make(D);
 
 module CardComponent = CardComponent.Make(D);
+module BoardComponent = BoardComponent.Make(D);
 
 /* State declaration */
 type state = {
@@ -29,17 +30,23 @@ let make = (~numPlayers, ~numCards, _children) => {
   reducer: (action, state) =>
     switch (action) {
     | SelectCard(card) => ReasonReact.Update({ game: Game.select(state.game, card) });
-    | PlayCard => ReasonReact.Update({ game: Game.play(state.game )});
+    | PlayCard => ReasonReact.Update({ game: state.game |> Game.play |> Game.nextPlayer });
     },
 
   render: self => {
     let { game } = self.state;
     <div>
-      {"Game is: " ++ Game.toString(game) |> ReasonReact.string}
-      <ListView 
-        makeListItem={(card) => <CardComponent card={card} onClickHandler={(_event) => self.send(SelectCard(card))}/>} 
-        cards={game |> Game.getHand |> Array.of_list}
-      />
+      <div>
+        {ReasonReact.string("Game Table")}
+        <BoardComponent game={game} />
+      </div>
+      <div>
+      {ReasonReact.string(Game.getCurrentPlayerId(game) ++ "'s hand:")}
+        <ListView 
+          makeListItem={(card) => <CardComponent card={card} onClickHandler={(_event) => self.send(SelectCard(card))}/>} 
+          items={game |> Game.getHand |> Array.of_list}
+        />
+      </div>
       <div>
         {game 
           |> Game.showSelectedCard 

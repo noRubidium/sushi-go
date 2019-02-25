@@ -3,13 +3,13 @@ module type S = {
 
     type card;
 
-    let newGame: (list(card)) => t;
+    let newGame: (list(card), string) => t;
 
     let getHand: t => list(card);
 
     let getTable: t => list(card);
 
-    let select: (t, card) => t;
+    let select: (card, t) => t;
 
     let getSelected: t => option(card);
 
@@ -20,6 +20,8 @@ module type S = {
     let isHandEmpty: t => bool;
 
     let toString: t => string;
+
+    let getId: t => string;
 
     module Scoring: {
         let updateGameCtx: (t, GameScoringCtx.t) => GameScoringCtx.t;
@@ -40,15 +42,17 @@ module Make = (Deck: Deck.S) => {
         nextTable: list(card),
         selectedCard: option(card),
         ctx: PlayerScoringCtx.t,
+        id: string,
     };
     
-    let newGame = (hand) => { 
+    let newGame = (hand, id) => { 
         hand, 
         table: [], 
         selectedCard: None, 
         nextHand: hand, 
         nextTable: [], 
         ctx: PlayerScoringCtx.newCtx(), 
+        id,
     };
     
     let getHand = t => t.hand;
@@ -71,7 +75,7 @@ module Make = (Deck: Deck.S) => {
         };
     };
     
-    let select = (t, card) => {
+    let select = (card, t) => {
         switch (mePlay(t, card)) {
         | None => t;
         | Some((nextHand, nextTable)) => { ...t, selectedCard: Some(card), nextHand, nextTable };
@@ -80,20 +84,23 @@ module Make = (Deck: Deck.S) => {
 
     let getSelected = t => t.selectedCard;
 
-    let play = ({ nextHand, nextTable, ctx }) => { 
+    let play = ({ nextHand, nextTable, ctx, id }) => { 
         hand: nextHand, 
         table: nextTable, 
         nextHand, 
         nextTable, 
         selectedCard: None, 
         ctx,
+        id,
     };
 
     let nextRound = (t, ~newHand) => { ...t, hand: newHand, nextHand: newHand, selectedCard: None };
     
     let isHandEmpty = t => t.hand === [];
+
+    let getId = t => t.id;
     
-    let toString = t => "(Player (Hand(" ++ Utils.string_of_list(t.hand, ~f=Deck.toString) ++ 
+    let toString = t => "(Player (Id(" ++ getId(t) ++ "))(Selected" ++ Option.toString(t.selectedCard, ~f=Deck.toString)++ ")(Hand(" ++ Utils.string_of_list(t.hand, ~f=Deck.toString) ++ 
         "), Table(" ++ Utils.string_of_list(t.table, ~f=Deck.toString)++ ")))";
 
     module Scoring = {

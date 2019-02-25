@@ -10,8 +10,8 @@ module Styles = {
 /* This is the basic component. */
 let component = ReasonReact.statelessComponent("ListView");
 
-let make = (~cards, ~makeListItem, _children) => {
+let make = (~items, ~makeListItem, _children) => {
   ...component,
   render: _self =>
-    <div className={Styles.list}> {Array.map(makeListItem, cards) |> ReasonReact.array}</div>,
+    <div className={Styles.list}> {Array.map(makeListItem, items) |> ReasonReact.array}</div>,
 };

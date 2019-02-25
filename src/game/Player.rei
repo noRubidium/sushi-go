@@ -3,13 +3,13 @@ module type S = {
 
     type card;
 
-    let newGame: (list(card)) => t;
+    let newGame: (list(card), string) => t;
 
     let getHand: t => list(card);
 
     let getTable: t => list(card);
 
-    let select: (t, card) => t;
+    let select: (card, t) => t;
 
     let getSelected: t => option(card);
 
@@ -20,6 +20,7 @@ module type S = {
     let isHandEmpty: t => bool;
 
     let toString: t => string;
+    let getId: t => string;
     
     module Scoring: {
         let updateGameCtx: (t, GameScoringCtx.t) => GameScoringCtx.t;

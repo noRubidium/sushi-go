@@ -52,4 +52,14 @@ let splice = (l: list('a), ~n: int) => {
     splice(l, ~n, ~acc=[])
 }
 
+let updateNth = (l, ~n, ~e) => {
+    let n = List.length(l) - n - 1;
+    ListLabels.fold_right(~f=(v, (i, l)) => (i + 1, [i === n ? e : v, ...l]), ~init=(0, []), l) |> snd
+};
+
+let rotate = l => switch(l) {
+| [] => []
+| [x, ...l] => List.concat([l, [x]])
+};
+
 let string_of_list = (l, ~f) => ListLabels.fold_left(~f=(s, e) => s ++ "(" ++ f(e) ++ ")", ~init="(", l) ++ ")";

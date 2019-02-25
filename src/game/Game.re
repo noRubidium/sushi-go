@@ -3,12 +3,16 @@ module Make = (D: Deck.S) => {
     module Player = Player.Make(D);
 
     type t = {
-        currentPlayer: Player.t,
-        otherPlayers: list(Player.t),
+        currentPlayer: int,
+        players: list(Player.t),
         deck: list(D.t),
     };
+    
+    type table = { id: string, cards: list(D.t)};
 
     let draw_n_cards = Utils.splice;
+
+    let nextPlayer = t => { ...t, currentPlayer: (t.currentPlayer + 1) mod List.length(t.players)};
 
     let newGame = (~numCards: int, ~numPlayers: int) => {
         Random.self_init();
@@ -20,57 +24,47 @@ module Make = (D: Deck.S) => {
             hand;
         };
         {
-            currentPlayer: Player.newGame(draw_cards()),
-            otherPlayers: Utils.repeat(numPlayers - 1, ~f=(_n) => Player.newGame(draw_cards())),
+            currentPlayer: 0,
+            players: Utils.repeat(numPlayers, ~f=(n) => Player.newGame(draw_cards(), string_of_int(n))),
             deck: shuffled_deck^,
         }
     };
 
-    let getTable = (t: t) => {
-        (
-            Player.getTable(t.currentPlayer),
-            ListLabels.map(t.otherPlayers, ~f=Player.getTable)
-        )
+    let getCurrentPlayer = t => List.nth(t.players, t.currentPlayer);
+
+    let setCurrentPlayer = (t, p) => {
+        ...t,
+        players: Utils.updateNth(t.players, ~n=t.currentPlayer, ~e=p),
     }
 
-    let getHand = (t: t) => Player.getHand(t.currentPlayer);
+    let getTable = (t: t) => ListLabels.map(t.players, ~f=p => { id: Player.getId(p), cards: Player.getTable(p) });
 
-    let select = (t, card) => {
-        let { currentPlayer } = t;
-        { ...t, currentPlayer: Player.select(currentPlayer, card) };
-    };
+    let getCurrentPlayerId = t => t |> getCurrentPlayer |> Player.getId;
 
-    let play = (t) => {
-        let { currentPlayer } = t;
-        { ...t, currentPlayer: Player.play(currentPlayer) };
-    };
+    let getHand = (t: t) => t |> getCurrentPlayer |> Player.getHand;
 
-    let hasSelectedCard = t => Player.getSelected(t.currentPlayer) != None;
+    let select = (t, card) => t |> getCurrentPlayer |> Player.select(card) |> setCurrentPlayer(t);
 
-    let showSelectedCard = t => Player.getSelected(t.currentPlayer);
+    let play = (t) =>  t |> getCurrentPlayer |> Player.play |> setCurrentPlayer(t);
 
-    let rotateHand = (players, currentPlayerHand) => 
-        ListLabels.fold_left(
-            ~init=([], currentPlayerHand), 
-            ~f=((players, currentHand), p) => ([Player.nextRound(p, ~newHand=currentHand), ...players], Player.getHand(p)),
-            players
-            )
+    let showSelectedCard = t => t |> getCurrentPlayer |> Player.getSelected;
+
+    let hasSelectedCard = t => showSelectedCard(t) != None;
+
+    let rotateHand = (players) => 
+        List.map(Player.getHand, players)
+        |> Utils.rotate
+        |> List.combine(players)
+        |> List.map(((player, newHand)) => Player.nextRound(player, ~newHand));
 
     let nextRound = (t: t) => {
-        let currentPlayerHand = Player.getHand(t.currentPlayer);
-        let (otherPlayers, newHand) = rotateHand(t.otherPlayers, currentPlayerHand);
-        {
-            ...t,
-            currentPlayer: Player.nextRound(t.currentPlayer, ~newHand),
-            otherPlayers
-        }
+        ...t,
+        players: rotateHand(t.players),
     };
 
-    let isGameEnd = (t: t) => Player.isHandEmpty(t.currentPlayer);
+    let isGameEnd = (t: t) => t |> getCurrentPlayer |> Player.isHandEmpty;
 
     let toString = (t: t) => 
-        "((CurrentPlayer(" ++ Player.toString(t.currentPlayer) ++ "))" ++
-        "(OtherPlayers" ++ Utils.string_of_list(t.otherPlayers, ~f=Player.toString) ++ ")"
-        ++ ")";
+        "(Game (CurrentPlayerIndex(" ++ string_of_int(t.currentPlayer) ++ ")(Players" ++ Utils.string_of_list(t.players, ~f=Player.toString) ++ ")";
 }
 
