@@ -34,9 +34,9 @@ module Make = (Deck: Deck.S) => {
         | Me((_hand, table)) => table
     };
     
-    let findOneToPlay = (list: list('a)) => (v: 'a) => 
-        ListLabels.fold_left(~init=(None, []), ~f=(acc, elem) => switch (acc) {
-            | (None, l) => if (elem === v) (Some(elem), l) else (None, [v, ...l])
+    let findOneToPlay = (list: list('a), v: 'a) =>
+        ListLabels.fold_right(~init=(None, []), ~f=(elem, acc) => switch (acc) {
+            | (None, l) => if (elem === v) (Some(elem), l) else (None, [elem, ...l])
             | (Some(v), l) => (Some(v), [elem, ...l])
             }
         , list)

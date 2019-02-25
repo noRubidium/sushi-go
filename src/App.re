@@ -40,20 +40,12 @@ type state = {
       },
   
     render: self => {
-      let message =
-        "You've clicked this " ++ " times(s)";
-      let game = "Game is: "  ++ Game.toString(self.state.game);
+      let { game } = self.state;
       <div>
-        <button onClick={_event => self.send(Click)}>
-          {ReasonReact.string(message)}
-        </button>
-        <button onClick={_event => self.send(Toggle)}>
-          {ReasonReact.string("Toggle greeting")}
-        </button>
-        {ReasonReact.string(game)}
+        {"Game is: " ++ Game.toString(game) |> ReasonReact.string}
         <ListView 
           makeListItem={(c) => c |> D.toString |> ReasonReact.string} 
-          cards={self.state.game |> Game.getHand |> Array.of_list}
+          cards={game |> Game.getHand |> Array.of_list}
           makeHandleClick={(card, _event, _handle) => self.send(PlayCard(card))}
         />
       </div>;
