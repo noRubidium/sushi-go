@@ -1,7 +1,7 @@
 module Base = {
     let num_points = 2;
     let num_cards = 10;
-    let image = "None";
+    let image = "salmonNigiri";
     let name = "SalmonNigiri";
 };
 

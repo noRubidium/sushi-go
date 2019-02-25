@@ -20,6 +20,14 @@ module type S = {
     let isHandEmpty: t => bool;
 
     let toString: t => string;
+    
+    module Scoring: {
+        let updateGameCtx: (t, GameScoringCtx.t) => GameScoringCtx.t;
+
+        let updatePlayerCtx: t => PlayerScoringCtx.t;
+
+        let scoreThisTurn: (t, GameScoringCtx.t) => int;
+    }
 };
 
 module Make: (D: Deck.S) => {

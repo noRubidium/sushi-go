@@ -20,6 +20,14 @@ module type S = {
     let isHandEmpty: t => bool;
 
     let toString: t => string;
+
+    module Scoring: {
+        let updateGameCtx: (t, GameScoringCtx.t) => GameScoringCtx.t;
+
+        let updatePlayerCtx: t => PlayerScoringCtx.t;
+
+        let scoreThisTurn: (t, GameScoringCtx.t) => int;
+    }
 };
 
 module Make = (Deck: Deck.S) => {
@@ -31,9 +39,17 @@ module Make = (Deck: Deck.S) => {
         nextHand: list(card),
         nextTable: list(card),
         selectedCard: option(card),
+        ctx: PlayerScoringCtx.t,
     };
     
-    let newGame = (hand) => { hand, table: [], selectedCard: None, nextHand: hand, nextTable: [] };
+    let newGame = (hand) => { 
+        hand, 
+        table: [], 
+        selectedCard: None, 
+        nextHand: hand, 
+        nextTable: [], 
+        ctx: PlayerScoringCtx.newCtx(), 
+    };
     
     let getHand = t => t.hand;
     
@@ -64,7 +80,14 @@ module Make = (Deck: Deck.S) => {
 
     let getSelected = t => t.selectedCard;
 
-    let play = ({ nextHand, nextTable }) => { hand: nextHand, table: nextTable, nextHand, nextTable, selectedCard: None };
+    let play = ({ nextHand, nextTable, ctx }) => { 
+        hand: nextHand, 
+        table: nextTable, 
+        nextHand, 
+        nextTable, 
+        selectedCard: None, 
+        ctx,
+    };
 
     let nextRound = (t, ~newHand) => { ...t, hand: newHand, nextHand: newHand, selectedCard: None };
     
@@ -72,4 +95,10 @@ module Make = (Deck: Deck.S) => {
     
     let toString = t => "(Player (Hand(" ++ Utils.string_of_list(t.hand, ~f=Deck.toString) ++ 
         "), Table(" ++ Utils.string_of_list(t.table, ~f=Deck.toString)++ ")))";
+
+    module Scoring = {
+        let updateGameCtx = (t, ctx) => Deck.updateGameContext(List.hd(t.table), ctx);
+        let updatePlayerCtx = (t) => Deck.updatePlayerContext(List.hd(t.table), t.ctx);
+        let scoreThisTurn = (t: t, gCtx) => Deck.score(List.hd(t.table), t.ctx, gCtx);
+    }
 }

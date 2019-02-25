@@ -18,7 +18,7 @@ type state = {
   
   /* Component template declaration.
      Needs to be **after** state and action declarations! */
-  let component = ReasonReact.reducerComponent("Example");
+  let component = ReasonReact.reducerComponent("App");
   
   /* greeting and children are props. `children` isn't used, therefore ignored.
      We ignore it by prepending it with an underscore */
@@ -42,7 +42,7 @@ type state = {
       <div>
         {"Game is: " ++ Game.toString(game) |> ReasonReact.string}
         <ListView 
-          makeListItem={(c) => <button>{c |> D.toString |> ReasonReact.string}</button>} 
+          makeListItem={(c) => <button><img src={D.getImage(c)}/></button>} 
           cards={game |> Game.getHand |> Array.of_list}
           makeHandleClick={(card, _event, _handle) => self.send(SelectCard(card))}
         />

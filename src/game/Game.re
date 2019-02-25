@@ -40,7 +40,6 @@ module Make = (D: Deck.S) => {
         { ...t, currentPlayer: Player.select(currentPlayer, card) };
     };
 
-
     let play = (t) => {
         let { currentPlayer } = t;
         { ...t, currentPlayer: Player.play(currentPlayer) };
