@@ -7,7 +7,13 @@ module Make: (D: Deck.S) => {
 
     let getHand: t => list(D.t);
     
-    let play: t => D.t => option(t);
+    let select: (t, D.t) => t;
+
+    let play: t => t;
+
+    let hasSelectedCard: t => bool;
+
+    let showSelectedCard: t => string;
     
     let nextRound: t => t;
     

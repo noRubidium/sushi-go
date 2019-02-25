@@ -9,7 +9,11 @@ module type S = {
 
     let getTable: t => list(card);
 
-    let play: (t, card) => option(t);
+    let select: (t, card) => t;
+
+    let getSelected: t => option(card);
+
+    let play: t => t;
 
     let nextRound: (t, ~newHand: list(card)) => t;
 

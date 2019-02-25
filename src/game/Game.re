@@ -35,12 +35,22 @@ module Make = (D: Deck.S) => {
 
     let getHand = (t: t) => Player.getHand(t.currentPlayer);
 
-    let play = (t) => card => {
+    let select = (t, card) => {
         let { currentPlayer } = t;
-        switch (Player.play(currentPlayer, card)) {
-        | None => None;
-        | Some(currentPlayer) => Some({ ...t, currentPlayer })
-        };
+        { ...t, currentPlayer: Player.select(currentPlayer, card) };
+    };
+
+
+    let play = (t) => {
+        let { currentPlayer } = t;
+        { ...t, currentPlayer: Player.play(currentPlayer) };
+    };
+
+    let hasSelectedCard = t => Player.getSelected(t.currentPlayer) != None;
+
+    let showSelectedCard = t => switch(Player.getSelected(t.currentPlayer)) {
+    | Some(card) => D.toString(card)
+    | None => ""
     };
 
     let rotateHand = (players, currentPlayerHand) => 

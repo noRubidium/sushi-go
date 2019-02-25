@@ -13,7 +13,8 @@ type state = {
   type action =
     | Click
     | Toggle
-    | PlayCard(D.t);
+    | SelectCard(D.t)
+    | PlayCard;
   
   /* Component template declaration.
      Needs to be **after** state and action declarations! */
@@ -32,11 +33,8 @@ type state = {
       switch (action) {
       | Click => ReasonReact.Update({game: Game.nextRound(state.game)})
       | Toggle => ReasonReact.NoUpdate; /*ReasonReact.Update({...state })*/
-      | PlayCard(card) => 
-        switch (Game.play(state.game, card)) {
-        | Some(game) => ReasonReact.Update({ game: game })
-        | None => ReasonReact.NoUpdate;
-        };
+      | SelectCard(card) => ReasonReact.Update({ game: Game.select(state.game, card) });
+      | PlayCard => ReasonReact.Update({ game: Game.play(state.game )});
       },
   
     render: self => {
@@ -44,10 +42,12 @@ type state = {
       <div>
         {"Game is: " ++ Game.toString(game) |> ReasonReact.string}
         <ListView 
-          makeListItem={(c) => c |> D.toString |> ReasonReact.string} 
+          makeListItem={(c) => <button>{c |> D.toString |> ReasonReact.string}</button>} 
           cards={game |> Game.getHand |> Array.of_list}
-          makeHandleClick={(card, _event, _handle) => self.send(PlayCard(card))}
+          makeHandleClick={(card, _event, _handle) => self.send(SelectCard(card))}
         />
+        {(Game.hasSelectedCard(game) ? "Selected card is: " ++ Game.showSelectedCard(game) : "") |> ReasonReact.string}
+        <button onClick={(_event) => self.send(PlayCard)}>{"Play" |> ReasonReact.string}</button>
       </div>;
     },
   };
