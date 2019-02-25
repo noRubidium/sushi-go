@@ -8,8 +8,6 @@ let repeat = (n, ~f) => {
     repeat(n, ~f, ~acc=[]);
 };
 
-let string_of_list = (t, ~f): string => List.fold_left((acc, e) => acc ++ "," ++ f(e), "(", t) ++ ")";
-
 let rec hex_of_int = (i: int) => 
 if (i < 10) {
     string_of_int(i);

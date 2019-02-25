@@ -13,7 +13,7 @@ module Make: (D: Deck.S) => {
 
     let hasSelectedCard: t => bool;
 
-    let showSelectedCard: t => string;
+    let showSelectedCard: t => option(D.t);
     
     let nextRound: t => t;
     

@@ -47,10 +47,7 @@ module Make = (D: Deck.S) => {
 
     let hasSelectedCard = t => Player.getSelected(t.currentPlayer) != None;
 
-    let showSelectedCard = t => switch(Player.getSelected(t.currentPlayer)) {
-    | Some(card) => D.toString(card)
-    | None => ""
-    };
+    let showSelectedCard = t => Player.getSelected(t.currentPlayer);
 
     let rotateHand = (players, currentPlayerHand) => 
         ListLabels.fold_left(
