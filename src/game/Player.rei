@@ -1,0 +1,23 @@
+module type S = {
+    type t;
+
+    type card;
+
+    let newGame: (list(card)) => t;
+
+    let getHand: t => list(card);
+
+    let getTable: t => list(card);
+
+    let play: (t, card) => option(t);
+
+    let nextRound: (t, ~newHand: list(card)) => t;
+
+    let isHandEmpty: t => bool;
+
+    let toString: t => string;
+};
+
+module Make: (D: Deck.S) => {
+    include S with type card := D.t;
+};
