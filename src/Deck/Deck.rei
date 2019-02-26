@@ -11,5 +11,8 @@ module Make:
     Special1: Special.S,
     Special2: Special.S,
     Roll: Roll.S,
+    Appetizer1: Appetizer.S,
+    Appetizer2: Appetizer.S,
+    Appetizer3: Appetizer.S,
   ) =>
    S;

@@ -1,5 +1,5 @@
 module D =
-  Deck.Make(TamagoNigiri, SalmonNigiri, SquidNigiri, Wasabi, Wasabi, Maki);
+  Deck.Make(TamagoNigiri, SalmonNigiri, SquidNigiri, Wasabi, Wasabi, Maki, Sashimi, Sashimi, Sashimi);
 module Game = Game.Make(D);
 
 module CardComponent = CardComponent.Make(D);
