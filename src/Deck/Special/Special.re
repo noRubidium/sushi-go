@@ -1,4 +1,4 @@
 module type S = {
-    include Card.S;
-    type special;
+  include Card.S;
+  type special;
 };

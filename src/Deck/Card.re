@@ -1,15 +1,15 @@
 module type S = {
-    type t;
+  type t;
 
-    let getNewSortedDeck: unit => list(t);
+  let getNewSortedDeck: unit => list(t);
 
-    let score: (PlayerScoringCtx.t, GameScoringCtx.t, t) => int;
+  let score: (PlayerScoringCtx.t, GameScoringCtx.t, t) => int;
 
-    let updateGameContext: (GameScoringCtx.t, t) => GameScoringCtx.t;
+  let updateGameContext: (GameScoringCtx.t, t) => GameScoringCtx.t;
 
-    let updatePlayerContext: (PlayerScoringCtx.t, t) => PlayerScoringCtx.t;
+  let updatePlayerContext: (PlayerScoringCtx.t, t) => PlayerScoringCtx.t;
 
-    let getImage: t => string;
+  let getImage: t => string;
 
-    let toString: t => string;
+  let toString: t => string;
 };
