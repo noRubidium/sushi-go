@@ -1,1 +1,1 @@
-ReactDOMRe.renderToElementWithId(<App numPlayers=5 numCards=6 />, "app");
+ReactDOMRe.renderToElementWithId(<App numPlayers=2 numCards=1 />, "app");

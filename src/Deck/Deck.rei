@@ -10,5 +10,6 @@ module Make:
     Nigiri3: Nigiri.S,
     Special1: Special.S,
     Special2: Special.S,
+    Roll: Roll.S,
   ) =>
    S;

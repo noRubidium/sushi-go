@@ -1,4 +1,5 @@
-module D = Deck.Make(TamagoNigiri, SalmonNigiri, SquidNigiri, Wasabi, Wasabi);
+module D =
+  Deck.Make(TamagoNigiri, SalmonNigiri, SquidNigiri, Wasabi, Wasabi, Maki);
 module Game = Game.Make(D);
 
 module CardComponent = CardComponent.Make(D);
@@ -21,6 +22,9 @@ module GameCtrl = {
       let game =
         Game.isRoundEnd(game) ?
           game |> Game.calcThisRoundPoint |> Game.nextRound : game;
+      let game =
+        Game.isRoundEnd(game) && Game.isGameEnd(game) ?
+          game |> Game.tallyGameEnd : game;
       ReasonReact.Update({game: game |> Game.nextPlayer});
     };
 };
@@ -67,7 +71,7 @@ let make = (~numPlayers, ~numCards, _children) => {
          |> Option.valueWithDefault(~default=Constants.emptyElement)}
       </div>
       <button onClick={_event => self.send(PlayCard)}>
-        {"Play" |> ReasonReact.string}
+        {(Game.isGameEnd(game) ? "End of Game" : "Play") |> ReasonReact.string}
       </button>
     </div>;
   },

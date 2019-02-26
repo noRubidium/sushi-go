@@ -9,6 +9,10 @@ module type S = {
 
   let updatePlayerContext: (PlayerScoringCtx.t, t) => PlayerScoringCtx.t;
 
+  let getTallyCtx: (PlayerScoringCtx.t, EndOfGameCtx.t) => EndOfGameCtx.t;
+
+  let tally: (PlayerScoringCtx.t, EndOfGameCtx.t) => int;
+
   let getImage: t => string;
 
   let toString: t => string;

@@ -20,6 +20,10 @@ module Make = (N: N) => {
   let score = (ctx, _ctx, _t) =>
     N.num_points * (PlayerScoringCtx.hasTripleScoringNigiri(ctx) ? 3 : 1);
 
+  let getTallyCtx = (_ctx, ctx) => ctx;
+
+  let tally = (_ctx, _ctx) => 0;
+
   let updateGameContext = (ctx, _t) => ctx;
 
   let updatePlayerContext = (ctx, _t) =>

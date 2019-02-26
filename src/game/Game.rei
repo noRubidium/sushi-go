@@ -35,5 +35,7 @@ module Make:
 
     let isGameEnd: t => bool;
 
+    let tallyGameEnd: t => t;
+
     let toString: t => string;
   };

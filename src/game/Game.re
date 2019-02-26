@@ -97,6 +97,18 @@ module Make = (D: Deck.S) => {
 
   let isGameEnd = (t: t) => t |> getCurrentPlayer |> Player.isHandEmpty;
 
+  let tallyGameEnd = t => {
+    open Player.Scoring;
+    let eCtx =
+      t.players
+      |> ListLabels.fold_right(
+           ~f=updateEndOfGameCtx,
+           ~init=EndOfGameCtx.newCtx(),
+         );
+    let players = List.map(tally(eCtx), t.players);
+    {...t, players};
+  };
+
   let toString = (t: t) =>
     "(Game (CurrentPlayerIndex("
     ++ string_of_int(t.currentPlayer)

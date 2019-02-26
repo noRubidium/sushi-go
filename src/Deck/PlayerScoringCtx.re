@@ -1,10 +1,11 @@
 // This is the context that's used when scoring the cards.
 type t = {
   tripleScoringNigiri: int,
+  rollCount: int, // Used to count how many rolls there are
   randomField: int,
 };
 
-let newCtx = () => {tripleScoringNigiri: 0, randomField: 0};
+let newCtx = () => {tripleScoringNigiri: 0, randomField: 0, rollCount: 0};
 
 let addTripleScoringNigiri = (t: t) => {
   ...t,
@@ -17,3 +18,10 @@ let removeTripleScoringNigiri = (t: t) => {
 };
 
 let hasTripleScoringNigiri = (t: t) => t.tripleScoringNigiri != 0;
+
+let addRollCount = (t, n) => {
+    ...t,
+    rollCount: t.rollCount + n,
+};
+
+let getRollCount = t => t.rollCount;

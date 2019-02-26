@@ -1,39 +1,3 @@
-module type S = {
-  type t;
-
-  type card;
-
-  let newGame: (list(card), string) => t;
-
-  let getHand: t => list(card);
-
-  let getTable: t => list(card);
-
-  let select: (card, t) => t;
-
-  let getSelected: t => option(card);
-
-  let getScore: t => int;
-
-  let play: t => t;
-
-  let nextRound: (t, ~newHand: list(card)) => t;
-
-  let isHandEmpty: t => bool;
-
-  let toString: t => string;
-
-  let getId: t => string;
-
-  module Scoring: {
-    let updateGameCtx: (t, GameScoringCtx.t) => GameScoringCtx.t;
-
-    let updatePlayerCtx: t => t;
-
-    let scoreThisTurn: (t, GameScoringCtx.t) => t;
-  };
-};
-
 module Make = (Deck: Deck.S) => {
   type card = Deck.t;
 
@@ -139,9 +103,17 @@ module Make = (Deck: Deck.S) => {
       ...t,
       ctx: t |> lastPlayed |> Deck.updatePlayerContext(t.ctx),
     };
+
     let scoreThisTurn = (t: t, gCtx) => {
       let score = t |> lastPlayed |> Deck.score(t.ctx, gCtx);
       {...t, score: score + t.score};
     };
+
+    let updateEndOfGameCtx = (t) => Deck.getTallyCtx(t.ctx);
+
+    let tally = (eCtx, t) => {
+        let score = Deck.tally(t.ctx, eCtx);
+        {...t, score: score + t.score};
+    }
   };
 };
