@@ -1,14 +1,19 @@
 // This is the context that's used when scoring the cards.
 type t = {
-  tripleScoringNigiri: bool,
+  tripleScoringNigiri: int,
   randomField: int,
 };
 
-let newCtx = () => {tripleScoringNigiri: false, randomField: 0};
+let newCtx = () => {tripleScoringNigiri: 0, randomField: 0};
 
-let setTripleScoringNigiri = (t: t, tripleScoringNigiri) => {
+let addTripleScoringNigiri = (t: t) => {
   ...t,
-  tripleScoringNigiri,
+  tripleScoringNigiri: t.tripleScoringNigiri + 1,
 };
 
-let getTripleScoringNigiri = (t: t) => t.tripleScoringNigiri;
+let removeTripleScoringNigiri = (t: t) => {
+  ...t,
+  tripleScoringNigiri: t.tripleScoringNigiri - 1,
+};
+
+let hasTripleScoringNigiri = (t: t) => t.tripleScoringNigiri != 0;

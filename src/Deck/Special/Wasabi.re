@@ -9,7 +9,7 @@ let score = (_ctx, _ctx, _t) => 0;
 let updateGameContext = (ctx, _t) => ctx;
 
 let updatePlayerContext = (ctx, _t) =>
-  PlayerScoringCtx.setTripleScoringNigiri(ctx, true);
+  PlayerScoringCtx.addTripleScoringNigiri(ctx);
 
 let getImage = _t => Constants.imgBase ++ "wasabi.png";
 

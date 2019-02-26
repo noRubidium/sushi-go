@@ -9,12 +9,14 @@ module Make =
          Nigiri2: Nigiri.S,
          Nigiri3: Nigiri.S,
          Special1: Special.S,
+         Special2: Special.S,
        ) => {
   type t =
     | Nigiri1(Nigiri1.t)
     | Nigiri2(Nigiri2.t)
     | Nigiri3(Nigiri3.t)
-    | Special1(Special1.t);
+    | Special1(Special1.t)
+    | Special2(Special2.t);
 
   type full_deck = unit;
 
@@ -24,6 +26,7 @@ module Make =
       Nigiri2.getNewSortedDeck() |> ListLabels.map(~f=t => Nigiri2(t)),
       Nigiri3.getNewSortedDeck() |> ListLabels.map(~f=t => Nigiri3(t)),
       Special1.getNewSortedDeck() |> ListLabels.map(~f=t => Special1(t)),
+      Special2.getNewSortedDeck() |> ListLabels.map(~f=t => Special2(t)),
     ]
     |> List.concat;
 
@@ -33,6 +36,7 @@ module Make =
     | Nigiri2(n) => Nigiri2.score(pCtx, gCtx, n)
     | Nigiri3(n) => Nigiri3.score(pCtx, gCtx, n)
     | Special1(s) => Special1.score(pCtx, gCtx, s)
+    | Special2(s) => Special2.score(pCtx, gCtx, s)
     };
 
   let updateGameContext = (gCtx, t) =>
@@ -41,6 +45,7 @@ module Make =
     | Nigiri2(n) => Nigiri2.updateGameContext(gCtx, n)
     | Nigiri3(n) => Nigiri3.updateGameContext(gCtx, n)
     | Special1(s) => Special1.updateGameContext(gCtx, s)
+    | Special2(s) => Special2.updateGameContext(gCtx, s)
     };
 
   let updatePlayerContext = (pCtx, t) =>
@@ -49,6 +54,7 @@ module Make =
     | Nigiri2(n) => Nigiri2.updatePlayerContext(pCtx, n)
     | Nigiri3(n) => Nigiri3.updatePlayerContext(pCtx, n)
     | Special1(s) => Special1.updatePlayerContext(pCtx, s)
+    | Special2(s) => Special2.updatePlayerContext(pCtx, s)
     };
 
   let getImage = (t: t) =>
@@ -57,6 +63,7 @@ module Make =
     | Nigiri2(n) => Nigiri2.getImage(n)
     | Nigiri3(n) => Nigiri3.getImage(n)
     | Special1(s) => Special1.getImage(s)
+    | Special2(s) => Special2.getImage(s)
     };
 
   let toString = (t: t) =>
@@ -65,5 +72,6 @@ module Make =
     | Nigiri2(n) => "(Nigiri2 " ++ Nigiri2.toString(n) ++ ")"
     | Nigiri3(n) => "(Nigiri3 " ++ Nigiri3.toString(n) ++ ")"
     | Special1(s) => "(Special1 " ++ Special1.toString(s) ++ ")"
+    | Special2(s) => "(Special2 " ++ Special2.toString(s) ++ ")"
     };
 };
