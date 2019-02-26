@@ -1,7 +1,7 @@
 module Make: (D: Deck.S) => {
     type t;
     
-    type table = { id: string, cards: list(D.t)};
+    type table = { id: string, cards: list(D.t), score: int };
 
     let newGame: (~numCards: int, ~numPlayers: int) => t;
     
@@ -22,6 +22,10 @@ module Make: (D: Deck.S) => {
     let showSelectedCard: t => option(D.t);
     
     let nextRound: t => t;
+
+    let calcThisRoundPoint: t => t;
+
+    let isRoundEnd: t => bool;
     
     let isGameEnd: t => bool;
     

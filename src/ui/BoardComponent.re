@@ -23,8 +23,9 @@ module Make = (D: Deck.S) => {
 
     module CardComponent = CardComponent.Make(D);
 
-    let makePlayerTable = ({ id, cards }: Game.table) => <div className={Styles.table}>
+    let makePlayerTable = ({ id, cards, score }: Game.table) => <div className={Styles.table}>
         <div className={Styles.text}>{"Player (" ++ id ++ "):" |> ReasonReact.string}</div>
+        <div className={Styles.text}>{"Score is: " ++ string_of_int(score) |> ReasonReact.string}</div>
         <div className={Styles.m}>
             <ListView 
                 items={cards |> Array.of_list} 

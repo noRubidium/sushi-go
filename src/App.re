@@ -8,12 +8,22 @@ module BoardComponent = BoardComponent.Make(D);
 type state = {
   game: Game.t,
 };
-  
 /* Action declaration */
 type action =
   | SelectCard(D.t)
   | PlayCard;
 
+module GameCtrl = {
+  let reducer = (action, state) =>
+    switch (action) {
+    | SelectCard(card) => ReasonReact.Update({ game: Game.select(state.game, card) });
+    | PlayCard => {
+      let game = state.game |> Game.play;
+      let game = Game.isRoundEnd(game) ? game |> Game.calcThisRoundPoint |> Game.nextRound : game;
+      ReasonReact.Update({ game: game |> Game.nextPlayer });
+    }
+  };
+}
 /* Component template declaration.
     Needs to be **after** state and action declarations! */
 let component = ReasonReact.reducerComponent("App");
@@ -27,11 +37,7 @@ let make = (~numPlayers, ~numCards, _children) => {
   initialState: () => { game: Game.newGame(~numPlayers, ~numCards)},
 
   /* State transitions */
-  reducer: (action, state) =>
-    switch (action) {
-    | SelectCard(card) => ReasonReact.Update({ game: Game.select(state.game, card) });
-    | PlayCard => ReasonReact.Update({ game: state.game |> Game.play |> Game.nextPlayer });
-    },
+  reducer: GameCtrl.reducer,
 
   render: self => {
     let { game } = self.state;

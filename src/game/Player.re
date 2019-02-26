@@ -12,6 +12,8 @@ module type S = {
     let select: (card, t) => t;
 
     let getSelected: t => option(card);
+		
+		let getScore: t => int;
 
     let play: t => t;
 
@@ -21,14 +23,14 @@ module type S = {
 
     let toString: t => string;
 
-    let getId: t => string;
+		let getId: t => string;
 
     module Scoring: {
         let updateGameCtx: (t, GameScoringCtx.t) => GameScoringCtx.t;
 
-        let updatePlayerCtx: t => PlayerScoringCtx.t;
+        let updatePlayerCtx: t => t;
 
-        let scoreThisTurn: (t, GameScoringCtx.t) => int;
+        let scoreThisTurn: (t, GameScoringCtx.t) => t;
     }
 };
 
@@ -42,6 +44,7 @@ module Make = (Deck: Deck.S) => {
         nextTable: list(card),
         selectedCard: option(card),
         ctx: PlayerScoringCtx.t,
+        score: int,
         id: string,
     };
     
@@ -52,6 +55,7 @@ module Make = (Deck: Deck.S) => {
         nextHand: hand, 
         nextTable: [], 
         ctx: PlayerScoringCtx.newCtx(), 
+        score: 0,
         id,
     };
     
@@ -84,15 +88,17 @@ module Make = (Deck: Deck.S) => {
 
     let getSelected = t => t.selectedCard;
 
-    let play = ({ nextHand, nextTable, ctx, id }) => { 
-        hand: nextHand, 
-        table: nextTable, 
-        nextHand, 
-        nextTable, 
-        selectedCard: None, 
-        ctx,
-        id,
-    };
+    let play = (t) => {
+        let { nextHand, nextTable } = t;
+        { 
+            ...t,
+            hand: nextHand,
+            table: nextTable,
+            selectedCard: None,
+        }
+		};
+		
+		let getScore = t => t.score;
 
     let nextRound = (t, ~newHand) => { ...t, hand: newHand, nextHand: newHand, selectedCard: None };
     
@@ -106,7 +112,13 @@ module Make = (Deck: Deck.S) => {
     module Scoring = {
         let lastPlayed = t => List.hd(t.table);
         let updateGameCtx = (t, ctx) => t |> lastPlayed |> Deck.updateGameContext(ctx);
-        let updatePlayerCtx = (t) => t |> lastPlayed |> Deck.updatePlayerContext(t.ctx);
-        let scoreThisTurn = (t: t, gCtx) => t |> lastPlayed |> Deck.score(t.ctx, gCtx);
+        let updatePlayerCtx = (t) => {
+					...t,
+					ctx: t |> lastPlayed |> Deck.updatePlayerContext(t.ctx)
+				};
+        let scoreThisTurn = (t: t, gCtx) => {
+					let score = t |> lastPlayed |> Deck.score(t.ctx, gCtx);
+					{ ...t, score: score + t.score};
+				};
     }
 }

@@ -8,7 +8,7 @@ module Make = (D: Deck.S) => {
         deck: list(D.t),
     };
     
-    type table = { id: string, cards: list(D.t)};
+    type table = { id: string, cards: list(D.t), score: int };
 
     let draw_n_cards = Utils.splice;
 
@@ -37,7 +37,7 @@ module Make = (D: Deck.S) => {
         players: Utils.updateNth(t.players, ~n=t.currentPlayer, ~e=p),
     }
 
-    let getTable = (t: t) => ListLabels.map(t.players, ~f=p => { id: Player.getId(p), cards: Player.getTable(p) });
+    let getTable = (t: t) => ListLabels.map(t.players, ~f=p => { id: Player.getId(p), cards: Player.getTable(p), score: Player.getScore(p) });
 
     let getCurrentPlayerId = t => t |> getCurrentPlayer |> Player.getId;
 
@@ -56,6 +56,16 @@ module Make = (D: Deck.S) => {
         |> Utils.rotate
         |> List.combine(players)
         |> List.map(((player, newHand)) => Player.nextRound(player, ~newHand));
+
+    let calcThisRoundPoint = t => {
+        let { players } = t;
+        open Player.Scoring;
+        let gCtx = ListLabels.fold_right(~f=updateGameCtx, ~init=GameScoringCtx.newCtx(), players);
+        let players = ListLabels.map(~f=p => scoreThisTurn(p, gCtx) |> updatePlayerCtx, players);
+        { ...t, players };
+    };
+
+    let isRoundEnd = t => t.currentPlayer === List.length(t.players) - 1;
 
     let nextRound = (t: t) => {
         ...t,

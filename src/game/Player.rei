@@ -13,6 +13,8 @@ module type S = {
 
     let getSelected: t => option(card);
 
+    let getScore: t => int;
+
     let play: t => t;
 
     let nextRound: (t, ~newHand: list(card)) => t;
@@ -25,9 +27,9 @@ module type S = {
     module Scoring: {
         let updateGameCtx: (t, GameScoringCtx.t) => GameScoringCtx.t;
 
-        let updatePlayerCtx: t => PlayerScoringCtx.t;
+        let updatePlayerCtx: t => t;
 
-        let scoreThisTurn: (t, GameScoringCtx.t) => int;
+        let scoreThisTurn: (t, GameScoringCtx.t) => t;
     }
 };
 
