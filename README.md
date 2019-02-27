@@ -2,7 +2,8 @@
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/noRubidium/sushi-go.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/noRubidium/sushi-go.svg?branch=master)](https://travis-ci.org/noRubidium/sushi-go)
-
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/noRubidium/sushi-go.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/noRubidium/sushi-go/alerts/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/noRubidium/sushi-go.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/noRubidium/sushi-go/context:javascript)
 ## Run Project
 
 ```sh
