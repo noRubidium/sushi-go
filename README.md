@@ -1,5 +1,7 @@
 # sushi-go
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/noRubidium/sushi-go.svg)](https://greenkeeper.io/)
+
 ## Run Project
 
 ```sh
