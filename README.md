@@ -15,8 +15,6 @@ npm run webpack
 
 After you see the webpack compilation succeed (the `npm run webpack` step), open up `build/index.html` (**no server needed!**). Then modify whichever `.re` file in `src` and refresh the page to see the changes.
 
-**For more elaborate ReasonReact examples**, please see https://github.com/reasonml-community/reason-react-example
-
 ## Run Project with Server
 
 To run with the webpack development server run `npm run server` and view in the browser at http://localhost:8000. Running in this environment provides hot reloading and support for routing; just edit and save the file and the browser will automatically refresh.
