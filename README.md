@@ -1,6 +1,7 @@
 # sushi-go
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/noRubidium/sushi-go.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.org/noRubidium/sushi-go.svg?branch=master)](https://travis-ci.org/noRubidium/sushi-go)
 
 ## Run Project
 
