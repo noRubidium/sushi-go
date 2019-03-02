@@ -35,3 +35,9 @@ This will replace the development artifact `build/Index.js` for an optimized ver
 If you make use of routing (via `ReasonReact.Router` or similar logic) ensure that server-side routing handles your routes or that 404's are directed back to `index.html` (which is how the dev server is set up).
 
 **To enable dead code elimination**, change `bsconfig.json`'s `package-specs` `module` from `"commonjs"` to `"es6"`. Then re-run the above 2 commands. This will allow Webpack to remove unused code.
+
+## Design
+
+The first iteration of thr game is aiming at making a single laptop game with players sitting around the laptop, taking turns to look at the laptop screen and play their cards. We aim to add all the cards and card play in this iteration, some special cards needs further considerstions of the design.
+
+Server will be added in the next iteration and game logic will be moved to the backend to ensure the security of the game. In this case, we will add more plays and variants as well.
