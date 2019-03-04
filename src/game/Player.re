@@ -28,9 +28,7 @@ module Make = (Deck: Deck.S) => {
   let getTable = t => t.table;
 
   let findOneToPlay = (list: list('a), v: 'a) =>
-    ListLabels.fold_right(
-      ~init=(None, []),
-      ~f=
+    List.fold_right(
         (elem, acc) =>
           switch (acc) {
           | (None, l) =>
@@ -42,6 +40,7 @@ module Make = (Deck: Deck.S) => {
           | (Some(v), l) => (Some(v), [elem, ...l])
           },
       list,
+      (None, []),
     );
 
   let mePlay = ({hand, table}, card) => {

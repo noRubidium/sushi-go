@@ -10,11 +10,13 @@ type state = {game: Game.t};
 /* Action declaration */
 type action =
   | SelectCard(D.t)
-  | PlayCard;
+  | PlayCard
+  | Noop;
 
 module GameCtrl = {
   let reducer = (action, state) =>
     switch (action) {
+    | Noop => ReasonReact.NoUpdate;
     | SelectCard(card) =>
       ReasonReact.Update({game: Game.select(state.game, card)})
     | PlayCard =>
@@ -70,7 +72,7 @@ let make = (~numPlayers, ~numCards, _children) => {
             )
          |> Option.valueWithDefault(~default=Constants.emptyElement)}
       </div>
-      <button onClick={_event => self.send(PlayCard)}>
+      <button onClick={_event => self.send(Game.isGameEnd(game) ? Noop : PlayCard)}>
         {(Game.isGameEnd(game) ? "End of Game" : "Play") |> ReasonReact.string}
       </button>
     </div>;

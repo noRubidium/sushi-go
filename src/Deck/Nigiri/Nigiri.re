@@ -1,3 +1,5 @@
+open! Utils;
+
 module type S = {
   include Card.S;
   type nigiri;
@@ -15,7 +17,7 @@ module Make = (N: N) => {
 
   type nigiri = unit;
 
-  let getNewSortedDeck = () => Utils.repeat(N.num_cards, ~f=_i => ());
+  let getNewSortedDeck = () => List.repeat(N.num_cards, ~f=_i => ());
 
   let score = (ctx, _ctx, _t) =>
     N.num_points * (PlayerScoringCtx.hasTripleScoringNigiri(ctx) ? 3 : 1);

@@ -30,15 +30,15 @@ module Make =
 
   let getNewSortedDeck = () =>
     [
-      Nigiri1.getNewSortedDeck() |> ListLabels.map(~f=t => Nigiri1(t)),
-      Nigiri2.getNewSortedDeck() |> ListLabels.map(~f=t => Nigiri2(t)),
-      Nigiri3.getNewSortedDeck() |> ListLabels.map(~f=t => Nigiri3(t)),
-      Special1.getNewSortedDeck() |> ListLabels.map(~f=t => Special1(t)),
-      Special2.getNewSortedDeck() |> ListLabels.map(~f=t => Special2(t)),
-      Roll.getNewSortedDeck() |> ListLabels.map(~f=t => Roll(t)),
-      Appetizer1.getNewSortedDeck() |> ListLabels.map(~f=t => Appetizer1(t)),
-      Appetizer2.getNewSortedDeck() |> ListLabels.map(~f=t => Appetizer2(t)),
-      Appetizer3.getNewSortedDeck() |> ListLabels.map(~f=t => Appetizer3(t)),
+      Nigiri1.getNewSortedDeck() |> List.map(t => Nigiri1(t)),
+      Nigiri2.getNewSortedDeck() |> List.map(t => Nigiri2(t)),
+      Nigiri3.getNewSortedDeck() |> List.map(t => Nigiri3(t)),
+      Special1.getNewSortedDeck() |> List.map(t => Special1(t)),
+      Special2.getNewSortedDeck() |> List.map(t => Special2(t)),
+      Roll.getNewSortedDeck() |> List.map(t => Roll(t)),
+      Appetizer1.getNewSortedDeck() |> List.map(t => Appetizer1(t)),
+      Appetizer2.getNewSortedDeck() |> List.map(t => Appetizer2(t)),
+      Appetizer3.getNewSortedDeck() |> List.map(t => Appetizer3(t)),
     ]
     |> List.concat;
 

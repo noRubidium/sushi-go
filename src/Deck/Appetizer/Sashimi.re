@@ -1,8 +1,10 @@
+open Utils;
+
 type t = unit; // int shows how many makis it contains
 
 type appetizer = unit;
 
-let getNewSortedDeck = () => Utils.repeat(10, ~f=_i => ());
+let getNewSortedDeck = () => List.repeat(10, ~f=_i => ());
 
 let score = (ctx, _ctx, _t) => PlayerScoringCtx.shouldScoreSashimi(ctx) ? 10 : 0;
 

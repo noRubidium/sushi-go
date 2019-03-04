@@ -1,3 +1,5 @@
+open Utils;
+
 module Make = (D: Deck.S) => {
   module Player = Player.Make(D);
 
@@ -13,7 +15,7 @@ module Make = (D: Deck.S) => {
     score: int,
   };
 
-  let draw_n_cards = Utils.splice;
+  let draw_n_cards = List.splice;
 
   let nextPlayer = t => {
     ...t,
@@ -23,7 +25,7 @@ module Make = (D: Deck.S) => {
   let newGame = (~numCards: int, ~numPlayers: int) => {
     Random.self_init();
     let deck = D.getNewSortedDeck();
-    let shuffled_deck = ref(Utils.shuffle(deck));
+    let shuffled_deck = ref(List.shuffle(deck));
     let draw_cards = () => {
       let (hand, deck) = draw_n_cards(shuffled_deck^, ~n=numCards);
       shuffled_deck := deck;
@@ -32,7 +34,7 @@ module Make = (D: Deck.S) => {
     {
       currentPlayer: 0,
       players:
-        Utils.repeat(numPlayers, ~f=n =>
+        List.repeat(numPlayers, ~f=n =>
           Player.newGame(draw_cards(), string_of_int(n))
         ),
       deck: shuffled_deck^,
@@ -43,17 +45,16 @@ module Make = (D: Deck.S) => {
 
   let setCurrentPlayer = (t, p) => {
     ...t,
-    players: Utils.updateNth(t.players, ~n=t.currentPlayer, ~e=p),
+    players: List.updateNth(t.players, ~n=t.currentPlayer, ~e=p),
   };
 
-  let getTable = (t: t) =>
-    ListLabels.map(t.players, ~f=p =>
+  let getTable = t => List.map(p =>
       {
         id: Player.getId(p),
         cards: Player.getTable(p),
         score: Player.getScore(p),
       }
-    );
+    , t.players);
 
   let getCurrentPlayerId = t => t |> getCurrentPlayer |> Player.getId;
 
@@ -70,7 +71,7 @@ module Make = (D: Deck.S) => {
 
   let rotateHand = players =>
     List.map(Player.getHand, players)
-    |> Utils.rotate
+    |> List.rotate
     |> List.combine(players)
     |> List.map(((player, newHand)) => Player.nextRound(player, ~newHand));
 
@@ -78,14 +79,14 @@ module Make = (D: Deck.S) => {
     let {players} = t;
     open Player.Scoring;
     let gCtx =
-      ListLabels.fold_right(
-        ~f=updateGameCtx,
-        ~init=GameScoringCtx.newCtx(),
+      List.fold_right(
+        updateGameCtx,
         players,
+        GameScoringCtx.newCtx(),
       );
     let players =
-      ListLabels.map(
-        ~f=p => scoreThisTurn(p, gCtx) |> updatePlayerCtx,
+      List.map(
+        p => scoreThisTurn(p, gCtx) |> updatePlayerCtx,
         players,
       );
     {...t, players};
@@ -99,12 +100,7 @@ module Make = (D: Deck.S) => {
 
   let tallyGameEnd = t => {
     open Player.Scoring;
-    let eCtx =
-      t.players
-      |> ListLabels.fold_right(
-           ~f=updateEndOfGameCtx,
-           ~init=EndOfGameCtx.newCtx(),
-         );
+    let eCtx = List.fold_right(updateEndOfGameCtx, t.players, EndOfGameCtx.newCtx());
     let players = List.map(tally(eCtx), t.players);
     {...t, players};
   };
@@ -113,6 +109,6 @@ module Make = (D: Deck.S) => {
     "(Game (CurrentPlayerIndex("
     ++ string_of_int(t.currentPlayer)
     ++ ")(Players"
-    ++ Utils.string_of_list(t.players, ~f=Player.toString)
+    ++ string_of_list(t.players, ~f=Player.toString)
     ++ ")";
 };

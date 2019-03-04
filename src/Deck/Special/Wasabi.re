@@ -1,8 +1,10 @@
+open! Utils;
+
 type t = unit;
 
 type special = unit;
 
-let getNewSortedDeck = () => Utils.repeat(3, ~f=_i => ());
+let getNewSortedDeck = () => List.repeat(3, ~f=_i => ());
 
 let score = (_ctx, _ctx, _t) => 0;
 
