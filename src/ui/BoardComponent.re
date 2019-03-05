@@ -18,8 +18,7 @@ module Styles = {
     ]);
 };
 
-module Make = (D: Deck.S) => {
-  module Game = Game.Make(D);
+module Make = (D: Deck.S, Game: Game.S with type deck := D.t) => {
 
   module CardComponent = CardComponent.Make(D);
 

@@ -12,7 +12,8 @@
     "subdirs" : true
   }, {
     "dir": "__tests__",
-    "type": "dev"
+    "type": "dev",
+    "subdirs" : true
   }],
   "package-specs": [{
     "module": "commonjs",
@@ -24,6 +25,9 @@
     "reason-react",
     "bs-css"
   ],
-  "bs-dev-dependencies": ["@glennsl/bs-jest"],
+  "bs-dev-dependencies": [
+    "@glennsl/bs-jest",
+    "bs-react-test-renderer"
+  ],
   "refmt": 3
 }
