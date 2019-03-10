@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const outputDir = path.join(__dirname, 'build/');
 
@@ -20,7 +21,8 @@ module.exports = {
     }),
     new CopyPlugin([
       { from: 'static', to: 'static'}
-    ])
+    ]),
+    new BundleAnalyzerPlugin(),
   ],
   devServer: {
     compress: true,
