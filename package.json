@@ -28,7 +28,7 @@
     "bs-react-test-renderer": "^2.0.0",
     "copy-webpack-plugin": "^5.0.0",
     "html-webpack-plugin": "^3.2.0",
-    "husky": "^2.0.0",
+    "husky": "^4.2.0",
     "jest": "^24.1.0",
     "lint-staged": "^8.1.5",
     "react-test-renderer": "^16.8.3",
